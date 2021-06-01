@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+
+        <title>Scoreboard Demo</title>
+        <meta name="description" content="The HTML5 Herald" />
+        <meta name="author" content="SitePoint" />
+
+        <style>
+            #test {
+                margin-bottom: 20px;
+            }
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+                    "Open Sans", "Helvetica Neue", sans-serif;
+            }
+            #radioControls {
+                display: flex;
+                align-items: center;
+            }
+            #radioControls label {
+                margin-right: 18px;
+            }
+            #radioControls input {
+                margin: 0 6px 0 0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="root">
+            <div id="test"></div>
+            <div id="controls">
+                <div><button id="previous" disabled>Previous</button> <button id="next">Next</button></div>
+                <div id="radioControls">
+                    <input type="radio" name="variant" id="baseballVariant" />
+                    <label for="baseballVariant">Baseball-style</label>
+                    <input type="radio" name="variant" id="clubVariant" checked /> <label for="clubVariant">Club-style</label>
+                    <input type="radio" name="variant" id="simpleVariant" /> <label for="simpleVariant">Simple</label>
+                </div>
+            </div>
+        </div>
+        <script src="scoreboard.js"></script>
+        <script>
+            const testRoot = document.getElementById("test");
+            const previous = document.getElementById("previous");
+            const next = document.getElementById("next");
+            const baseballVariant = document.getElementById("baseballVariant");
+            const clubVariant = document.getElementById("clubVariant");
+            const simpleVariant = document.getElementById("simpleVariant");
+
+            const team1 = {
+                name: "Short name",
+            };
+            const team2 = {
+                name: "Another team name that is actually kinda long",
+            };
+            const scores = [
+                { // 1
+                    team: 0,
+                    points: 0,
+                },
+                { // 2
+                    team: 1,
+                    points: 2,
+                },
+                { // 3
+                    team: 0,
+                    points: 3,
+                },
+                { // 4
+                    team: 1,
+                    points: 3,
+                },
+                { // 5
+                    team: 0,
+                    points: 2,
+                },
+                { // 6
+                    team: 0,
+                    points: 6,
+                },
+                { // 7
+                    team: 0,
+                    points: 0,
+                },
+                { // 8
+                    team: 0,
+                    points: 0,
+                },
+                { // 9
+                    team: 0,
+                    points: 1,
+                },
+                { // 10
+                    team: 0,
+                    points: 2,
+                },
+                { // 11
+                    team: 1,
+                    points: 1,
+                },
+            ];
+            const initialState = {
+                team1,
+                team2,
+                LSFE: 1,
+                ends: [],
+                complete: false,
+            };
+            let currentState = initialState;
+            let endIndex = 0;
+            const scoreboardOptions = {
+                variant: "club",
+                sheetName: "B",
+                additionalCssRules: [`:is(.scoreboard-end-cell,.scoreboard-end-label-cell):nth-child(odd) {background-color: #ddd !important;}`],
+                style: {
+                    team2Color: "rgb(114, 186, 255)",
+                },
+                showTenEnds: true
+            };
+            scoreboard(testRoot, initialState, scoreboardOptions);
+
+            previous.addEventListener("click", () => {
+                currentState = gameStateReducer(currentState, { type: "noop" });
+                currentState.ends.pop();
+                --endIndex;
+                scoreboard(testRoot, currentState, scoreboardOptions);
+                next.disabled = endIndex === scores.length;
+                previous.disabled = endIndex === 0;
+            });
+            next.addEventListener("click", () => {
+                const payload = scores[endIndex++];
+                currentState = gameStateReducer(currentState, { type: "score", payload });
+                scoreboard(testRoot, currentState, scoreboardOptions);
+                next.disabled = endIndex === scores.length;
+                previous.disabled = endIndex === 0;
+            });
+            function variantChange() {
+                const variant = baseballVariant.checked ? "baseball" : clubVariant.checked ? "club" : "simple";
+                scoreboardOptions.variant = variant;
+                scoreboard(testRoot, currentState, scoreboardOptions);
+            }
+            baseballVariant.addEventListener("change", variantChange);
+            clubVariant.addEventListener("change", variantChange);
+            simpleVariant.addEventListener("change", variantChange);
+        </script>
+    </body>
+</html>
