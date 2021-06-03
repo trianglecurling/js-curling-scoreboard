@@ -1,46 +1,201 @@
-interface ScoreboardStyles {
+// scoreboard.ts
+/**
+ * js-curling-scoreboard is a standalone, dependency-free JavaScript
+ * module that renders DOM to show a curling scoreboard.
+ * @module
+ */
+
+/**
+ * These properties are used directly in CSS to style various
+ * aspects of the scoreboard.
+ */
+export interface ScoreboardStyles {
+    /**
+     * Color of the top team
+     */
     team1Color: string;
+
+    /**
+     * Color of the bottom team
+     */
     team2Color: string;
-    team3Color: string;
+    
+    /**
+     * Scoreboard background color
+     */
     backgroundColor: string;
+
+    /**
+     * Scoreboard foreground color (grid lines)
+     */
     foregroundColor: string;
+
+    /**
+     * Color of score indicator numbers (used only in club-style scoreboards)
+     */
     scoreIndicatorNumberColor: string;
+
+    /**
+     * When the scoreboard changes, this color is used to temporarily
+     * highlight the cells that changed.
+     */
     flashBackgroundColor: string;
+
+    /**
+     * Font size of the scores/cards
+     */
     scoresFontSize: string;
+
+    /**
+     * Size of other text on the scoreboard
+     */
     textFontSize: string;
+
+    /**
+     * Size of the border on the scoreboard
+     */
     borderSize: string;
+
+    /**
+     * Color of the border (grid lines) on the scoreboard)
+     */
     borderColor: string;
+
+    /**
+     * Size of the grid lines on the scoreboard
+     */
     gridLineSize: string;
+
+    /**
+     * Scoreboard border radius
+     */
     borderRadius: string;
+
+    /**
+     * Font (family) used for the scoreboard
+     */
     fontFamily: string;
+
+    /**
+     * Font weight used for the scoreboard
+     */
     fontWeight: string;
 }
 
-interface ScoreboardOptions {
+/**
+ * Scoreboard options not related to game state
+ */
+export interface ScoreboardOptions {
+    /**
+     * Specify which scoreboard variant to use.
+     * 
+     * - baseball: Each column represents an end. Includes a total column.
+     * - club: Each column represents a different score (ascending points).
+     * - simple: Only show team score
+     */
     variant?: "baseball" | "club" | "simple";
+
+    /**
+     * The name of the sheet, shown in some variants
+     */
     sheetName?: string;
+
+    /**
+     * Style overrides
+     */
     style?: Partial<ScoreboardStyles>;
+
+    /**
+     * Additional CSS rules, each in the format:
+     * 
+     * `selector { property1: value1; property2: value2; etc. }`
+     */
     additionalCssRules?: string[];
+
+    /**
+     * If variant is "baseball", default to showing 10 ends (otherwise show 8)
+     */
     showTenEnds?: boolean;
+
+    /**
+     * If true, use doubles rules to make hammer determinations (blank ends
+     * cause hammer to switch teams))
+     */
     doubles?: boolean;
 }
 
-interface Team {
+/**
+ * Represents a team
+ */
+export interface Team {
+    /**
+     * Name of the team
+     */
     name?: string;
+
+    /**
+     * The team's color (unused - set using ScoreboardOptions.style)
+     */
     color?: string;
 }
 
-interface End {
+/**
+ * Represents the point outcome of a single end
+ */
+export interface End {
     team1Points: number;
     team2Points: number;
 }
 
-interface GameState {
+/**
+ * Represents the state of a curling game
+ */
+export interface GameState {
+    /**
+     * The top team
+     */
     team1: Team;
+
+    /**
+     * The bottom team
+     */
     team2: Team;
+
+    /**
+     * Last Stone in First End.
+     * Which team started with hammer? 0 for top, 1 for bottom.
+     */
     LSFE?: 0 | 1;
+
+    /**
+     * Ends that have been completed
+     */
     ends: End[];
+
+    /**
+     * Signals that the game is over (may generate "X" markers on some variants)
+     */
     complete: boolean;
+}
+
+/**
+ * This data structure captures the positions of cards displayed on a club-style scoreboard.
+ */
+export interface ClubStyleCards {
+    /**
+     * Maps point values to end numbers for the top team.
+     */
+    team1Line: (number | undefined)[];
+
+    /**
+     * Maps point values to end numbers for the bottom team
+     */
+    team2Line: (number | undefined)[];
+
+    /**
+     * Set of ends that were blank
+     */
+    blanks: Set<number>;
 }
 
 function enumerate<T>(array: T[]) {
@@ -71,25 +226,12 @@ const defaultStyle = {
     fontWeight: "bold",
 } as ScoreboardStyles;
 
-function getTeamWithHammer(state: GameState) {
-    if (state.complete) {
-        throw new Error("Game is already over.");
-    }
-    if (state.ends.length === 0) {
-        return state.LSFE;
-    } else {
-        for (let i = state.ends.length - 1; i >= 0; --i) {
-            if (state.ends[i].team1Points > state.ends[i].team2Points) {
-                return 1;
-            } else if (state.ends[i].team1Points < state.ends[i].team2Points) {
-                return 0;
-            }
-        }
-        return state.LSFE;
-    }
-}
-
-function getScore(ends: End[]) {
+/**
+ * Given a list of ends played, return the total score of each team.
+ * @param ends 
+ * @returns 
+ */
+export function getScore(ends: End[]) {
     return {
         team1: ends.map((e) => e.team1Points).reduce((p, c) => p + c, 0),
         team2: ends.map((e) => e.team2Points).reduce((p, c) => p + c, 0),
@@ -106,9 +248,9 @@ function getScore(ends: End[]) {
  * @param ends
  * @param LSFE
  * @param doubles
- * @returns
+ * @returns 0 if the top team, 1 if the bottom team, or undefined if LSFE is needed but unknown.
  */
-function getHammerTeam(ends: End[], LSFE?: 0 | 1, doubles = false): 0 | 1 | undefined {
+export function getHammerTeam(ends: End[], LSFE?: 0 | 1, doubles = false): 0 | 1 | undefined {
     if (doubles) {
         let lastScoringEnd = -1;
         let lastScoringTeam = LSFE;
@@ -132,7 +274,13 @@ function getHammerTeam(ends: End[], LSFE?: 0 | 1, doubles = false): 0 | 1 | unde
     }
 }
 
-function getClubStyleCardIndexes(ends: End[]) {
+/**
+ * Given a list of ends played, return a data structure indicating the
+ * positions to hang cards for a club-style scoreboard.
+ * @param ends 
+ * @returns ClubStyleCards
+ */
+export function getClubStyleCardIndexes(ends: End[]): ClubStyleCards | any {
     let topScore = 0;
     let bottomScore = 0;
     let blankCount = 0;
@@ -173,7 +321,8 @@ function getClubStyleCardIndexes(ends: End[]) {
  * The last element of the outer array represents blank ends. The string array in the last
  * element may have multiple elements, representing multiple ends that were blanked.
  *
- * == Mode ==
+ * **Mode**
+ * 
  * When mode is strict, any of the following conditions result in an Error being thrown:
  * - A end card is represented multiple times.
  * - The end cards are out of order
@@ -199,10 +348,10 @@ function getClubStyleCardIndexes(ends: End[]) {
  * @param mode
  * @returns
  */
-function getEndsFromClubStyle(
+export function getEndsFromClubStyle(
     lines: { team1Line: string[][]; team2Line: string[][] },
     mode: "strict" | "lenient" = "lenient"
-) {
+): End[] {
     // Make sure both lines are the same length
     if (lines.team1Line.length !== lines.team2Line.length) {
         throw new Error("Lines must be of the same length.");
@@ -329,14 +478,6 @@ function getEndsFromClubStyle(
     return ends;
 }
 
-const colorPriority = ["rgb(255, 134, 134)", "rgb(255, 255, 74)", "rgb(116, 116, 255)"];
-function setTeamColors(team1: Team, team2: Team) {
-    if (!team1.color || !team2.color) {
-        team1.color = colorPriority[0];
-        team2.color = colorPriority[1];
-    }
-}
-
 let once = false;
 function ensureStyles(additionalCssRules: string[] = []) {
     if (once) {
@@ -424,12 +565,25 @@ function ensureStyles(additionalCssRules: string[] = []) {
     }
 }
 
-interface Action<T extends keyof ActionTypeMap> {
+/**
+ * Describes a single modification to a GameState
+ */
+export interface Action<T extends keyof ActionTypeMap> {
+    /**
+     * String action type (see ActionTypeMap)
+     */
     type: T;
+
+    /**
+     * Payload for the action (see ActionTypeMap)
+     */
     payload: ActionTypeMap[T];
 }
 
-interface ActionTypeMap {
+/**
+ * A map from action types to their payload shape
+ */
+export interface ActionTypeMap {
     score: { team: 0 | 1; points: number };
     noop: undefined;
 }
@@ -438,7 +592,14 @@ function typeMatches<T extends keyof ActionTypeMap>(action: Action<any>, type: T
     return action.type === type;
 }
 
-function gameStateReducer<T extends keyof ActionTypeMap>(state: GameState, action: Action<T>): GameState {
+/**
+ * Given a GameState an an action, compute the resulting GameState. The input state is
+ * unmodified - this function returns a new object.
+ * @param state 
+ * @param action 
+ * @returns GameState
+ */
+export function gameStateReducer<T extends keyof ActionTypeMap>(state: GameState, action: Action<T>): GameState {
     const result = JSON.parse(JSON.stringify(state)) as GameState;
 
     if (typeMatches(action, "score")) {
@@ -451,7 +612,13 @@ function gameStateReducer<T extends keyof ActionTypeMap>(state: GameState, actio
     return result;
 }
 
-function scoreboard(elem: HTMLElement, state: GameState, options: ScoreboardOptions) {
+/**
+ * Render DOM into the given `elem` to produce a visualization of a curling scoreboard.
+ * @param elem Host element. Must be empty or contain a previously-rendered scoreboard.
+ * @param state 
+ * @param options 
+ */
+export function scoreboard(elem: HTMLElement, state: GameState, options: ScoreboardOptions) {
     const { variant = "baseball", sheetName = "", style = defaultStyle, showTenEnds = false } = options;
     ensureStyles(options.additionalCssRules);
     const container = document.createElement("div");
