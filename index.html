@@ -105,8 +105,6 @@
                 },
             ];
             const initialState = {
-                team1,
-                team2,
                 LSFE: 1,
                 ends: [],
                 complete: false,
@@ -114,6 +112,8 @@
             let currentState = initialState;
             let endIndex = 0;
             const scoreboardOptions = {
+                team1,
+                team2,
                 variant: "club",
                 sheetName: "B",
                 additionalCssRules: [`:is(.scoreboard-end-cell,.scoreboard-end-label-cell):nth-child(odd) {background-color: #ddd !important;}`],
