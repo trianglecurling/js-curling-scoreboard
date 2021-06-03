@@ -57,13 +57,13 @@ GameState
 
 #### Defined in
 
-[scoreboard.ts:602](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L602)
+[scoreboard.ts:588](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L588)
 
 ___
 
 ### getClubStyleCardIndexes
 
-▸ **getClubStyleCardIndexes**(`ends`): [ClubStyleCards](interfaces/clubstylecards.md) \| `any`
+▸ **getClubStyleCardIndexes**(`ends`): [ClubStyleCards](interfaces/clubstylecards.md)
 
 Given a list of ends played, return a data structure indicating the
 positions to hang cards for a club-style scoreboard.
@@ -76,13 +76,13 @@ positions to hang cards for a club-style scoreboard.
 
 #### Returns
 
-[ClubStyleCards](interfaces/clubstylecards.md) \| `any`
+[ClubStyleCards](interfaces/clubstylecards.md)
 
 ClubStyleCards
 
 #### Defined in
 
-[scoreboard.ts:283](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L283)
+[scoreboard.ts:283](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L283)
 
 ___
 
@@ -127,9 +127,7 @@ When mode is lenient, the following actions are taken for the same conditions:
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
-| `lines` | `Object` | `undefined` |
-| `lines.team1Line` | `string`[][] | `undefined` |
-| `lines.team2Line` | `string`[][] | `undefined` |
+| `lines` | [ClubStyleCards](interfaces/clubstylecards.md) | `undefined` |
 | `mode` | ``"strict"`` \| ``"lenient"`` | "lenient" |
 
 #### Returns
@@ -138,7 +136,7 @@ When mode is lenient, the following actions are taken for the same conditions:
 
 #### Defined in
 
-[scoreboard.ts:351](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L351)
+[scoreboard.ts:348](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L348)
 
 ___
 
@@ -168,7 +166,7 @@ If doubles is true, blank ends cause hammer to go to the other team.
 
 #### Defined in
 
-[scoreboard.ts:253](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L253)
+[scoreboard.ts:253](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L253)
 
 ___
 
@@ -195,7 +193,7 @@ Given a list of ends played, return the total score of each team.
 
 #### Defined in
 
-[scoreboard.ts:234](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L234)
+[scoreboard.ts:234](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L234)
 
 ___
 
@@ -219,4 +217,4 @@ Render DOM into the given `elem` to produce a visualization of a curling scorebo
 
 #### Defined in
 
-[scoreboard.ts:621](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L621)
+[scoreboard.ts:607](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L607)

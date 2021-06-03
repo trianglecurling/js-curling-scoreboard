@@ -29,7 +29,7 @@ Additional CSS rules, each in the format:
 
 #### Defined in
 
-[scoreboard.ts:113](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L113)
+[scoreboard.ts:113](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L113)
 
 ___
 
@@ -42,7 +42,7 @@ cause hammer to switch teams))
 
 #### Defined in
 
-[scoreboard.ts:124](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L124)
+[scoreboard.ts:124](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L124)
 
 ___
 
@@ -54,7 +54,7 @@ The name of the sheet, shown in some variants
 
 #### Defined in
 
-[scoreboard.ts:101](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L101)
+[scoreboard.ts:101](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L101)
 
 ___
 
@@ -66,7 +66,7 @@ If variant is "baseball", default to showing 10 ends (otherwise show 8)
 
 #### Defined in
 
-[scoreboard.ts:118](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L118)
+[scoreboard.ts:118](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L118)
 
 ___
 
@@ -78,7 +78,7 @@ Style overrides
 
 #### Defined in
 
-[scoreboard.ts:106](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L106)
+[scoreboard.ts:106](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L106)
 
 ___
 
@@ -90,7 +90,7 @@ The top team
 
 #### Defined in
 
-[scoreboard.ts:129](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L129)
+[scoreboard.ts:129](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L129)
 
 ___
 
@@ -102,7 +102,7 @@ The bottom team
 
 #### Defined in
 
-[scoreboard.ts:134](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L134)
+[scoreboard.ts:134](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L134)
 
 ___
 
@@ -118,4 +118,4 @@ Specify which scoreboard variant to use.
 
 #### Defined in
 
-[scoreboard.ts:96](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L96)
+[scoreboard.ts:96](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L96)

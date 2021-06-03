@@ -34,7 +34,7 @@ Scoreboard background color
 
 #### Defined in
 
-[scoreboard.ts:26](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L26)
+[scoreboard.ts:26](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L26)
 
 ___
 
@@ -46,7 +46,7 @@ Color of the border (grid lines) on the scoreboard)
 
 #### Defined in
 
-[scoreboard.ts:62](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L62)
+[scoreboard.ts:62](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L62)
 
 ___
 
@@ -58,7 +58,7 @@ Scoreboard border radius
 
 #### Defined in
 
-[scoreboard.ts:72](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L72)
+[scoreboard.ts:72](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L72)
 
 ___
 
@@ -70,7 +70,7 @@ Size of the border on the scoreboard
 
 #### Defined in
 
-[scoreboard.ts:57](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L57)
+[scoreboard.ts:57](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L57)
 
 ___
 
@@ -83,7 +83,7 @@ highlight the cells that changed.
 
 #### Defined in
 
-[scoreboard.ts:42](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L42)
+[scoreboard.ts:42](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L42)
 
 ___
 
@@ -95,7 +95,7 @@ Font (family) used for the scoreboard
 
 #### Defined in
 
-[scoreboard.ts:77](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L77)
+[scoreboard.ts:77](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L77)
 
 ___
 
@@ -107,7 +107,7 @@ Font weight used for the scoreboard
 
 #### Defined in
 
-[scoreboard.ts:82](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L82)
+[scoreboard.ts:82](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L82)
 
 ___
 
@@ -119,7 +119,7 @@ Scoreboard foreground color (grid lines)
 
 #### Defined in
 
-[scoreboard.ts:31](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L31)
+[scoreboard.ts:31](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L31)
 
 ___
 
@@ -131,7 +131,7 @@ Size of the grid lines on the scoreboard
 
 #### Defined in
 
-[scoreboard.ts:67](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L67)
+[scoreboard.ts:67](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L67)
 
 ___
 
@@ -143,7 +143,7 @@ Color of score indicator numbers (used only in club-style scoreboards)
 
 #### Defined in
 
-[scoreboard.ts:36](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L36)
+[scoreboard.ts:36](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L36)
 
 ___
 
@@ -155,7 +155,7 @@ Font size of the scores/cards
 
 #### Defined in
 
-[scoreboard.ts:47](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L47)
+[scoreboard.ts:47](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L47)
 
 ___
 
@@ -167,7 +167,7 @@ Color of the top team
 
 #### Defined in
 
-[scoreboard.ts:16](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L16)
+[scoreboard.ts:16](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L16)
 
 ___
 
@@ -179,7 +179,7 @@ Color of the bottom team
 
 #### Defined in
 
-[scoreboard.ts:21](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L21)
+[scoreboard.ts:21](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L21)
 
 ___
 
@@ -191,4 +191,4 @@ Size of other text on the scoreboard
 
 #### Defined in
 
-[scoreboard.ts:52](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L52)
+[scoreboard.ts:52](https://github.com/trianglecurling/js-curling-scoreboard/blob/94612dd/scoreboard.ts#L52)

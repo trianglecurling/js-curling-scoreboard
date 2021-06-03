@@ -89,34 +89,29 @@
     function getClubStyleCardIndexes(ends) {
         let topScore = 0;
         let bottomScore = 0;
-        let blankCount = 0;
         const score = getScore(ends);
-        const arrSize = Math.max(12, score.team1, score.team2) + 1;
-        const team1Line = Array.from({ length: arrSize }, () => []);
-        const team2Line = Array.from({ length: arrSize }, () => []);
+        const arrSize = Math.max(12, score.team1, score.team2);
+        const team1Line = new Array(arrSize).fill(undefined);
+        const team2Line = new Array(arrSize).fill(undefined);
+        const blanks = new Set();
         for (const [i, end] of enumerate(ends)) {
             const cardNum = i + 1;
             if (end.team1Points > 0) {
                 topScore += end.team1Points;
-                team1Line[topScore - 1].push(String(cardNum));
+                team1Line[topScore - 1] = cardNum;
             }
             else if (end.team2Points > 0) {
                 bottomScore += end.team2Points;
-                team2Line[bottomScore - 1].push(String(cardNum));
+                team2Line[bottomScore - 1] = cardNum;
             }
             else if (end.team1Points === 0 && end.team2Points === 0) {
-                if (blankCount++ % 2 === 0) {
-                    team1Line[team1Line.length - 1].push(String(cardNum));
-                }
-                else {
-                    team2Line[team2Line.length - 1].push(String(cardNum));
-                }
+                blanks.add(cardNum);
             }
             else {
                 throw new Error("Only one team can score in a given end.");
             }
         }
-        return { team1Line, team2Line };
+        return { team1Line, team2Line, blanks };
     }
     /**
      * Generates end-by-end scores from data formatted as you would see on a club-style scoreboard.
@@ -161,39 +156,32 @@
         if (lines.team1Line.length !== lines.team2Line.length) {
             throw new Error("Lines must be of the same length.");
         }
-        // Note the explicitly blank ends and remove them from the lines
-        const blankEnds = new Set(lines.team1Line[lines.team1Line.length - 1].concat(lines.team2Line[lines.team2Line.length - 1]).map(Number));
-        const team1line = lines.team1Line.slice(0, lines.team1Line.length - 1);
-        const team2line = lines.team2Line.slice(0, lines.team2Line.length - 1);
+        const { team1Line, team2Line } = lines;
+        const blanks = new Set(lines.blanks);
         // Maps end numbers to point values
         const endToPoints = {};
         const duplicatedEndCards = [];
-        for (let i = 0; i < team1line.length; ++i) {
-            const topCards = team1line[i];
-            const botCards = team2line[i];
-            if (topCards.length > 1 || botCards.length > 1) {
-                throw new Error("Unexpected multiple cards for given point spot (only allowed for blank ends).");
-            }
-            if (topCards.length === 1) {
-                const endNo = Number(topCards[0]);
-                if (!endToPoints[endNo]) {
-                    endToPoints[endNo] = { points: i + 1, team: 0 };
+        for (let i = 0; i < team1Line.length; ++i) {
+            const topCard = team1Line[i];
+            const botCard = team2Line[i];
+            if (topCard) {
+                if (!endToPoints[topCard]) {
+                    endToPoints[topCard] = { points: i + 1, team: 0 };
                 }
                 else {
-                    duplicatedEndCards.push({ endNumber: endNo, points: i + 1, team: 0 });
+                    duplicatedEndCards.push({ endNumber: topCard, points: i + 1, team: 0 });
                 }
             }
-            if (botCards.length === 1) {
-                const endNo = Number(botCards[0]);
-                if (!endToPoints[endNo]) {
-                    endToPoints[endNo] = { points: i + 1, team: 1 };
+            if (botCard) {
+                if (!endToPoints[botCard]) {
+                    endToPoints[botCard] = { points: i + 1, team: 1 };
                 }
                 else {
-                    duplicatedEndCards.push({ endNumber: endNo, points: i + 1, team: 1 });
+                    duplicatedEndCards.push({ endNumber: botCard, points: i + 1, team: 1 });
                 }
             }
         }
-        for (const endNo of blankEnds) {
+        for (const endNo of blanks) {
             if (!endToPoints[endNo]) {
                 endToPoints[endNo] = { points: 0, team: 0 };
             }
@@ -217,7 +205,7 @@
                         endToPoints[i] = { points: duplicatedCard.points, team: duplicatedCard.team };
                     }
                     else {
-                        blankEnds.add(i);
+                        blanks.add(i);
                         endToPoints[i] = { points: 0, team: 0 };
                     }
                 }
@@ -234,51 +222,49 @@
         for (let i = 1; i <= maxEndRepresented; ++i) {
             let team1Points = 0;
             let team2Points = 0;
-            if (endToPoints[i].team === 0) {
-                team1Points = endToPoints[i].points - team1Score;
-                if (team1Points > 8) {
-                    if (mode === "strict") {
-                        throw new Error("Invalid score reported for Team 1 (more than 8 points).");
+            if (endToPoints[i].points !== 0) {
+                if (endToPoints[i].team === 0) {
+                    team1Points = endToPoints[i].points - team1Score;
+                    if (team1Points > 8) {
+                        if (mode === "strict") {
+                            throw new Error("Invalid score reported for Team 1 (more than 8 points).");
+                        }
+                        else if (mode === "lenient") {
+                            team1Points = 0;
+                        }
                     }
-                    else if (mode === "lenient") {
-                        blankEnds.add(i);
-                        endToPoints[i] = { points: 0, team: 0 };
-                        team1Points = 0;
+                    if (team1Points < 0) {
+                        if (mode === "strict") {
+                            throw new Error("Encountered out of order end cards.");
+                        }
+                        else if (mode === "lenient") {
+                            endToPoints[i].points += team1Line.length;
+                            team1Points = endToPoints[i].points - team1Score;
+                        }
                     }
+                    team1Score = endToPoints[i].points;
                 }
-                if (team1Points < 0) {
-                    if (mode === "strict") {
-                        throw new Error("Encountered out of order end cards.");
+                if (endToPoints[i].team === 1) {
+                    team2Points = endToPoints[i].points - team2Score;
+                    if (team2Points > 8) {
+                        if (mode === "strict") {
+                            throw new Error("Invalid score reported for Team 2 (more than 8 points).");
+                        }
+                        else if (mode === "lenient") {
+                            team2Points = 0;
+                        }
                     }
-                    else if (mode === "lenient") {
-                        endToPoints[i].points += team1line.length;
-                        team1Points = endToPoints[i].points - team1Score;
+                    if (team2Points < 0) {
+                        if (mode === "strict") {
+                            throw new Error("Encountered out of order end cards.");
+                        }
+                        else if (mode === "lenient") {
+                            endToPoints[i].points += team2Line.length;
+                            team2Points = endToPoints[i].points - team2Score;
+                        }
                     }
+                    team2Score = endToPoints[i].points;
                 }
-                team1Score = endToPoints[i].points;
-            }
-            if (endToPoints[i].team === 1) {
-                team2Points = endToPoints[i].points - team2Score;
-                if (team2Points > 8) {
-                    if (mode === "strict") {
-                        throw new Error("Invalid score reported for Team 2 (more than 8 points).");
-                    }
-                    else if (mode === "lenient") {
-                        blankEnds.add(i);
-                        endToPoints[i] = { points: 0, team: 0 };
-                        team2Points = 0;
-                    }
-                }
-                if (team2Points < 0) {
-                    if (mode === "strict") {
-                        throw new Error("Encountered out of order end cards.");
-                    }
-                    else if (mode === "lenient") {
-                        endToPoints[i].points += team2line.length;
-                        team2Points = endToPoints[i].points - team2Score;
-                    }
-                }
-                team2Score = endToPoints[i].points;
             }
             ends.push({ team1Points, team2Points });
         }
@@ -416,6 +402,9 @@
             const repeatedColCount = Math.max(12, score.team1, score.team2) + (state.LSFE !== undefined ? 1 : 0);
             container.style.gridTemplateColumns = `3fr repeat(${repeatedColCount}, 1fr) 2fr`;
             const clubLines = getClubStyleCardIndexes(state.ends);
+            const sortedBlanks = Array.from(clubLines.blanks).sort();
+            const topBlanks = sortedBlanks.filter((_, i) => i % 2 === 0);
+            const botBlanks = sortedBlanks.filter((_, i) => i % 2 === 1);
             // Team 1 name cell
             const team1NameCell = document.createElement("div");
             team1NameCell.classList.add("team-name", "team-1", "scoreboard-cell", "tl");
@@ -441,21 +430,20 @@
             for (const card of clubLines.team1Line) {
                 const cell = document.createElement("div");
                 cell.classList.add("scoreboard-cell", "scoreboard-end-cell");
-                if (card === clubLines.team1Line[clubLines.team1Line.length - 1]) {
-                    cell.classList.add("tr");
-                }
-                if (card.length === 1) {
-                    cell.textContent = card[0];
-                }
-                else {
-                    for (const num of card) {
-                        const elem = document.createElement("div");
-                        elem.textContent = num;
-                        cell.append(elem);
-                    }
+                if (card !== undefined) {
+                    cell.textContent = String(card);
                 }
                 container.append(cell);
             }
+            // Team 1 blanks
+            const team1BlankCell = document.createElement("div");
+            team1BlankCell.classList.add("scoreboard-cell", "scoreboard-end-cell", "tr");
+            for (const topBlank of topBlanks) {
+                const elem = document.createElement("div");
+                elem.textContent = String(topBlank);
+                team1BlankCell.append(elem);
+            }
+            container.append(team1BlankCell);
             // Sheet name cell
             const sheetNameCell = document.createElement("div");
             sheetNameCell.classList.add("scoreboard-cell", "sheet-name");
@@ -503,21 +491,20 @@
             for (const card of clubLines.team2Line) {
                 const cell = document.createElement("div");
                 cell.classList.add("scoreboard-cell", "scoreboard-end-cell");
-                if (card === clubLines.team2Line[clubLines.team2Line.length - 1]) {
-                    cell.classList.add("br");
-                }
-                if (card.length === 1) {
-                    cell.textContent = card[0];
-                }
-                else {
-                    for (const num of card) {
-                        const elem = document.createElement("div");
-                        elem.textContent = num;
-                        cell.append(elem);
-                    }
+                if (card !== undefined) {
+                    cell.textContent = String(card);
                 }
                 container.append(cell);
             }
+            // Team 2 blanks
+            const team2BlankCell = document.createElement("div");
+            team2BlankCell.classList.add("scoreboard-cell", "scoreboard-end-cell", "br");
+            for (const botBlank of botBlanks) {
+                const elem = document.createElement("div");
+                elem.textContent = String(botBlank);
+                team2BlankCell.append(elem);
+            }
+            container.append(team2BlankCell);
         }
         else if (variant === "baseball") {
             const numEndsToShow = Math.max(showTenEnds ? 10 : 8, state.ends.length);
