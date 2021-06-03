@@ -23,7 +23,7 @@ Which team started with hammer? 0 for top, 1 for bottom.
 
 #### Defined in
 
-[scoreboard.ts:168](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L168)
+[scoreboard.ts:168](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L168)
 
 ___
 
@@ -35,7 +35,7 @@ Signals that the game is over (may generate "X" markers on some variants)
 
 #### Defined in
 
-[scoreboard.ts:178](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L178)
+[scoreboard.ts:178](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L178)
 
 ___
 
@@ -47,4 +47,4 @@ Ends that have been completed
 
 #### Defined in
 
-[scoreboard.ts:173](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L173)
+[scoreboard.ts:173](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L173)

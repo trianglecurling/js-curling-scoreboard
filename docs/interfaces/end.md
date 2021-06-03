@@ -19,7 +19,7 @@ Represents the point outcome of a single end
 
 #### Defined in
 
-[scoreboard.ts:156](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L156)
+[scoreboard.ts:156](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L156)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[scoreboard.ts:157](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L157)
+[scoreboard.ts:157](https://github.com/trianglecurling/js-curling-scoreboard/blob/52ea993/scoreboard.ts#L157)

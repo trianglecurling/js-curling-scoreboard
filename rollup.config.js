@@ -2,7 +2,6 @@ import typescript from "@rollup/plugin-typescript";
 import { terser } from "rollup-plugin-terser";
 
 export default function makeConfig(commandOptions) {
-    console.log(commandOptions);
     const plugins = [typescript()];
     let filename = "dist/scoreboard.js";
     if (commandOptions["config-prod"]) {
