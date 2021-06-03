@@ -19,7 +19,7 @@ export interface ScoreboardStyles {
      * Color of the bottom team
      */
     team2Color: string;
-    
+
     /**
      * Scoreboard background color
      */
@@ -88,7 +88,7 @@ export interface ScoreboardStyles {
 export interface ScoreboardOptions {
     /**
      * Specify which scoreboard variant to use.
-     * 
+     *
      * - baseball: Each column represents an end. Includes a total column.
      * - club: Each column represents a different score (ascending points).
      * - simple: Only show team score
@@ -107,7 +107,7 @@ export interface ScoreboardOptions {
 
     /**
      * Additional CSS rules, each in the format:
-     * 
+     *
      * `selector { property1: value1; property2: value2; etc. }`
      */
     additionalCssRules?: string[];
@@ -122,6 +122,16 @@ export interface ScoreboardOptions {
      * cause hammer to switch teams))
      */
     doubles?: boolean;
+
+    /**
+     * The top team
+     */
+    team1?: Team;
+
+    /**
+     * The bottom team
+     */
+    team2?: Team;
 }
 
 /**
@@ -151,16 +161,6 @@ export interface End {
  * Represents the state of a curling game
  */
 export interface GameState {
-    /**
-     * The top team
-     */
-    team1: Team;
-
-    /**
-     * The bottom team
-     */
-    team2: Team;
-
     /**
      * Last Stone in First End.
      * Which team started with hammer? 0 for top, 1 for bottom.
@@ -228,8 +228,8 @@ const defaultStyle = {
 
 /**
  * Given a list of ends played, return the total score of each team.
- * @param ends 
- * @returns 
+ * @param ends
+ * @returns
  */
 export function getScore(ends: End[]) {
     return {
@@ -277,7 +277,7 @@ export function getHammerTeam(ends: End[], LSFE?: 0 | 1, doubles = false): 0 | 1
 /**
  * Given a list of ends played, return a data structure indicating the
  * positions to hang cards for a club-style scoreboard.
- * @param ends 
+ * @param ends
  * @returns ClubStyleCards
  */
 export function getClubStyleCardIndexes(ends: End[]): ClubStyleCards | any {
@@ -322,7 +322,7 @@ export function getClubStyleCardIndexes(ends: End[]): ClubStyleCards | any {
  * element may have multiple elements, representing multiple ends that were blanked.
  *
  * **Mode**
- * 
+ *
  * When mode is strict, any of the following conditions result in an Error being thrown:
  * - A end card is represented multiple times.
  * - The end cards are out of order
@@ -595,8 +595,8 @@ function typeMatches<T extends keyof ActionTypeMap>(action: Action<any>, type: T
 /**
  * Given a GameState an an action, compute the resulting GameState. The input state is
  * unmodified - this function returns a new object.
- * @param state 
- * @param action 
+ * @param state
+ * @param action
  * @returns GameState
  */
 export function gameStateReducer<T extends keyof ActionTypeMap>(state: GameState, action: Action<T>): GameState {
@@ -615,11 +615,18 @@ export function gameStateReducer<T extends keyof ActionTypeMap>(state: GameState
 /**
  * Render DOM into the given `elem` to produce a visualization of a curling scoreboard.
  * @param elem Host element. Must be empty or contain a previously-rendered scoreboard.
- * @param state 
- * @param options 
+ * @param state
+ * @param options
  */
-export function scoreboard(elem: HTMLElement, state: GameState, options: ScoreboardOptions) {
-    const { variant = "baseball", sheetName = "", style = defaultStyle, showTenEnds = false } = options;
+export function render(elem: HTMLElement, state: GameState, options: ScoreboardOptions = {}) {
+    const {
+        variant = "baseball",
+        sheetName = "",
+        style = defaultStyle,
+        showTenEnds = false,
+        team1 = {},
+        team2 = {},
+    } = options;
     ensureStyles(options.additionalCssRules);
     const container = document.createElement("div");
     container.classList.add("scoreboard-container");
@@ -644,12 +651,12 @@ export function scoreboard(elem: HTMLElement, state: GameState, options: Scorebo
         const team1NameCell = document.createElement("div");
         team1NameCell.classList.add("team-name", "team-1", "scoreboard-cell", "tl");
         const team1NameSpan = document.createElement("span");
-        const team1Name = state.team1.name ?? "Team 1";
+        const team1Name = team1.name ?? "Team 1";
         team1NameSpan.setAttribute("title", team1Name);
         team1NameSpan.textContent = team1Name;
         team1NameCell.append(team1NameSpan);
-        if (state.team1.color) {
-            team1NameCell.style.backgroundColor = state.team1.color;
+        if (team1.color) {
+            team1NameCell.style.backgroundColor = team1.color;
         }
         container.append(team1NameCell);
 
@@ -711,12 +718,12 @@ export function scoreboard(elem: HTMLElement, state: GameState, options: Scorebo
         const team2NameCell = document.createElement("div");
         team2NameCell.classList.add("team-name", "team-2", "scoreboard-cell", "bl");
         const team2NameSpan = document.createElement("span");
-        const team2Name = state.team2.name ?? "Team 2";
+        const team2Name = team2.name ?? "Team 2";
         team2NameSpan.setAttribute("title", team2Name);
         team2NameSpan.textContent = team2Name;
         team2NameCell.append(team2NameSpan);
-        if (state.team2.color) {
-            team2NameCell.style.backgroundColor = state.team2.color;
+        if (team2.color) {
+            team2NameCell.style.backgroundColor = team2.color;
         }
         container.append(team2NameCell);
 
@@ -766,7 +773,7 @@ export function scoreboard(elem: HTMLElement, state: GameState, options: Scorebo
         }
 
         // End number cells
-        for (let i = 0; i < repeatedColCount - 1; ++i) {
+        for (let i = 0; i < numEndsToShow; ++i) {
             const cell = document.createElement("div");
             cell.classList.add("scoreboard-cell", "scoreboard-end-label-cell");
             const scoreVal = i + 1;
@@ -783,12 +790,12 @@ export function scoreboard(elem: HTMLElement, state: GameState, options: Scorebo
         const team1NameCell = document.createElement("div");
         team1NameCell.classList.add("team-name", "team-1", "scoreboard-cell");
         const team1NameSpan = document.createElement("span");
-        const team1Name = state.team1.name ?? "Team 1";
+        const team1Name = team1.name ?? "Team 1";
         team1NameSpan.setAttribute("title", team1Name);
         team1NameSpan.textContent = team1Name;
         team1NameCell.append(team1NameSpan);
-        if (state.team1.color) {
-            team1NameCell.style.backgroundColor = state.team1.color;
+        if (team1.color) {
+            team1NameCell.style.backgroundColor = team1.color;
         }
         container.append(team1NameCell);
 
@@ -821,12 +828,12 @@ export function scoreboard(elem: HTMLElement, state: GameState, options: Scorebo
         const team2NameCell = document.createElement("div");
         team2NameCell.classList.add("team-name", "team-2", "scoreboard-cell", "bl");
         const team2NameSpan = document.createElement("span");
-        const team2Name = state.team2.name ?? "Team 2";
+        const team2Name = team2.name ?? "Team 2";
         team2NameSpan.setAttribute("title", team2Name);
         team2NameSpan.textContent = team2Name;
         team2NameCell.append(team2NameSpan);
-        if (state.team2.color) {
-            team2NameCell.style.backgroundColor = state.team2.color;
+        if (team2.color) {
+            team2NameCell.style.backgroundColor = team2.color;
         }
         container.append(team2NameCell);
 
@@ -871,12 +878,12 @@ export function scoreboard(elem: HTMLElement, state: GameState, options: Scorebo
         const team1NameCell = document.createElement("div");
         team1NameCell.classList.add("team-name", "team-1", "scoreboard-cell");
         const team1NameSpan = document.createElement("span");
-        const team1Name = state.team1.name ?? "Team 1";
+        const team1Name = team1.name ?? "Team 1";
         team1NameSpan.setAttribute("title", team1Name);
         team1NameSpan.textContent = team1Name;
         team1NameCell.append(team1NameSpan);
-        if (state.team1.color) {
-            team1NameCell.style.backgroundColor = state.team1.color;
+        if (team1.color) {
+            team1NameCell.style.backgroundColor = team1.color;
         }
         container.append(team1NameCell);
 
@@ -889,12 +896,12 @@ export function scoreboard(elem: HTMLElement, state: GameState, options: Scorebo
         const team2NameCell = document.createElement("div");
         team2NameCell.classList.add("team-name", "team-2", "scoreboard-cell", "bl");
         const team2NameSpan = document.createElement("span");
-        const team2Name = state.team2.name ?? "Team 2";
+        const team2Name = team2.name ?? "Team 2";
         team2NameSpan.setAttribute("title", team2Name);
         team2NameSpan.textContent = team2Name;
         team2NameCell.append(team2NameSpan);
-        if (state.team2.color) {
-            team2NameCell.style.backgroundColor = state.team2.color;
+        if (team2.color) {
+            team2NameCell.style.backgroundColor = team2.color;
         }
         container.append(team2NameCell);
 

@@ -1,15 +1,15 @@
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.scoreboard = exports.gameStateReducer = exports.getEndsFromClubStyle = exports.getClubStyleCardIndexes = exports.getHammerTeam = exports.getScore = exports.getTeamWithHammer = void 0;
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+    typeof define === 'function' && define.amd ? define(['exports'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.scoreboard = {}));
+}(this, (function (exports) { 'use strict';
+
+    // scoreboard.ts
+    /**
+     * js-curling-scoreboard is a standalone, dependency-free JavaScript
+     * module that renders DOM to show a curling scoreboard.
+     * @module
+     */
     function enumerate(array) {
         return array.map((e, i) => [i, e]);
     }
@@ -33,33 +33,17 @@
         fontFamily: `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif`,
         fontWeight: "bold",
     };
-    function getTeamWithHammer(state) {
-        if (state.complete) {
-            throw new Error("Game is already over.");
-        }
-        if (state.ends.length === 0) {
-            return state.LSFE;
-        }
-        else {
-            for (let i = state.ends.length - 1; i >= 0; --i) {
-                if (state.ends[i].team1Points > state.ends[i].team2Points) {
-                    return 1;
-                }
-                else if (state.ends[i].team1Points < state.ends[i].team2Points) {
-                    return 0;
-                }
-            }
-            return state.LSFE;
-        }
-    }
-    exports.getTeamWithHammer = getTeamWithHammer;
+    /**
+     * Given a list of ends played, return the total score of each team.
+     * @param ends
+     * @returns
+     */
     function getScore(ends) {
         return {
             team1: ends.map((e) => e.team1Points).reduce((p, c) => p + c, 0),
             team2: ends.map((e) => e.team2Points).reduce((p, c) => p + c, 0),
         };
     }
-    exports.getScore = getScore;
     /**
      * Returns the team (0 or 1) which has hammer after the given ends. If no ends
      * have been played, or only blanks have been scored, use LSFE to deduce the
@@ -70,7 +54,7 @@
      * @param ends
      * @param LSFE
      * @param doubles
-     * @returns
+     * @returns 0 if the top team, 1 if the bottom team, or undefined if LSFE is needed but unknown.
      */
     function getHammerTeam(ends, LSFE, doubles = false) {
         if (doubles) {
@@ -96,7 +80,12 @@
             return nonBlankEnds.reverse()[0].team1Points === 0 ? 0 : 1;
         }
     }
-    exports.getHammerTeam = getHammerTeam;
+    /**
+     * Given a list of ends played, return a data structure indicating the
+     * positions to hang cards for a club-style scoreboard.
+     * @param ends
+     * @returns ClubStyleCards
+     */
     function getClubStyleCardIndexes(ends) {
         let topScore = 0;
         let bottomScore = 0;
@@ -129,7 +118,6 @@
         }
         return { team1Line, team2Line };
     }
-    exports.getClubStyleCardIndexes = getClubStyleCardIndexes;
     /**
      * Generates end-by-end scores from data formatted as you would see on a club-style scoreboard.
      *
@@ -296,14 +284,6 @@
         }
         return ends;
     }
-    exports.getEndsFromClubStyle = getEndsFromClubStyle;
-    const colorPriority = ["rgb(255, 134, 134)", "rgb(255, 255, 74)", "rgb(116, 116, 255)"];
-    function setTeamColors(team1, team2) {
-        if (!team1.color || !team2.color) {
-            team1.color = colorPriority[0];
-            team2.color = colorPriority[1];
-        }
-    }
     let once = false;
     function ensureStyles(additionalCssRules = []) {
         if (once) {
@@ -392,6 +372,13 @@
     function typeMatches(action, type) {
         return action.type === type;
     }
+    /**
+     * Given a GameState an an action, compute the resulting GameState. The input state is
+     * unmodified - this function returns a new object.
+     * @param state
+     * @param action
+     * @returns GameState
+     */
     function gameStateReducer(state, action) {
         const result = JSON.parse(JSON.stringify(state));
         if (typeMatches(action, "score")) {
@@ -400,14 +387,18 @@
                 team2Points: action.payload.team === 1 ? action.payload.points : 0,
             });
         }
-        else if (typeMatches(action, "noop")) {
-        }
+        else if (typeMatches(action, "noop")) ;
         return result;
     }
-    exports.gameStateReducer = gameStateReducer;
-    function scoreboard(elem, state, options) {
+    /**
+     * Render DOM into the given `elem` to produce a visualization of a curling scoreboard.
+     * @param elem Host element. Must be empty or contain a previously-rendered scoreboard.
+     * @param state
+     * @param options
+     */
+    function render(elem, state, options = {}) {
         var _a, _b, _c, _d, _e, _f;
-        const { variant = "baseball", sheetName = "", style = defaultStyle, showTenEnds = false } = options;
+        const { variant = "baseball", sheetName = "", style = defaultStyle, showTenEnds = false, team1 = {}, team2 = {}, } = options;
         ensureStyles(options.additionalCssRules);
         const container = document.createElement("div");
         container.classList.add("scoreboard-container");
@@ -415,7 +406,7 @@
         container.setAttribute("data-scoreboard-id", scoreboardId);
         container.setAttribute("data-scoreboard-variant", variant);
         const score = getScore(state.ends);
-        const hammerTeam = getHammerTeam(state.ends, state.LSFE, options.doubles);
+        getHammerTeam(state.ends, state.LSFE, options.doubles);
         // Set styles
         const styles = Object.assign(Object.assign({}, defaultStyle), style);
         for (const [property, value] of Object.entries(styles)) {
@@ -429,12 +420,12 @@
             const team1NameCell = document.createElement("div");
             team1NameCell.classList.add("team-name", "team-1", "scoreboard-cell", "tl");
             const team1NameSpan = document.createElement("span");
-            const team1Name = (_a = state.team1.name) !== null && _a !== void 0 ? _a : "Team 1";
+            const team1Name = (_a = team1.name) !== null && _a !== void 0 ? _a : "Team 1";
             team1NameSpan.setAttribute("title", team1Name);
             team1NameSpan.textContent = team1Name;
             team1NameCell.append(team1NameSpan);
-            if (state.team1.color) {
-                team1NameCell.style.backgroundColor = state.team1.color;
+            if (team1.color) {
+                team1NameCell.style.backgroundColor = team1.color;
             }
             container.append(team1NameCell);
             // Team 1 LSFE indicator cell
@@ -491,12 +482,12 @@
             const team2NameCell = document.createElement("div");
             team2NameCell.classList.add("team-name", "team-2", "scoreboard-cell", "bl");
             const team2NameSpan = document.createElement("span");
-            const team2Name = (_b = state.team2.name) !== null && _b !== void 0 ? _b : "Team 2";
+            const team2Name = (_b = team2.name) !== null && _b !== void 0 ? _b : "Team 2";
             team2NameSpan.setAttribute("title", team2Name);
             team2NameSpan.textContent = team2Name;
             team2NameCell.append(team2NameSpan);
-            if (state.team2.color) {
-                team2NameCell.style.backgroundColor = state.team2.color;
+            if (team2.color) {
+                team2NameCell.style.backgroundColor = team2.color;
             }
             container.append(team2NameCell);
             // Team 2 LSFE indicator cell
@@ -543,7 +534,7 @@
                 container.append(deadSpaceCell);
             }
             // End number cells
-            for (let i = 0; i < repeatedColCount - 1; ++i) {
+            for (let i = 0; i < numEndsToShow; ++i) {
                 const cell = document.createElement("div");
                 cell.classList.add("scoreboard-cell", "scoreboard-end-label-cell");
                 const scoreVal = i + 1;
@@ -558,12 +549,12 @@
             const team1NameCell = document.createElement("div");
             team1NameCell.classList.add("team-name", "team-1", "scoreboard-cell");
             const team1NameSpan = document.createElement("span");
-            const team1Name = (_c = state.team1.name) !== null && _c !== void 0 ? _c : "Team 1";
+            const team1Name = (_c = team1.name) !== null && _c !== void 0 ? _c : "Team 1";
             team1NameSpan.setAttribute("title", team1Name);
             team1NameSpan.textContent = team1Name;
             team1NameCell.append(team1NameSpan);
-            if (state.team1.color) {
-                team1NameCell.style.backgroundColor = state.team1.color;
+            if (team1.color) {
+                team1NameCell.style.backgroundColor = team1.color;
             }
             container.append(team1NameCell);
             // Team 1 LSFE indicator cell
@@ -593,12 +584,12 @@
             const team2NameCell = document.createElement("div");
             team2NameCell.classList.add("team-name", "team-2", "scoreboard-cell", "bl");
             const team2NameSpan = document.createElement("span");
-            const team2Name = (_d = state.team2.name) !== null && _d !== void 0 ? _d : "Team 2";
+            const team2Name = (_d = team2.name) !== null && _d !== void 0 ? _d : "Team 2";
             team2NameSpan.setAttribute("title", team2Name);
             team2NameSpan.textContent = team2Name;
             team2NameCell.append(team2NameSpan);
-            if (state.team2.color) {
-                team2NameCell.style.backgroundColor = state.team2.color;
+            if (team2.color) {
+                team2NameCell.style.backgroundColor = team2.color;
             }
             container.append(team2NameCell);
             // Team 2 LSFE indicator cell
@@ -640,12 +631,12 @@
             const team1NameCell = document.createElement("div");
             team1NameCell.classList.add("team-name", "team-1", "scoreboard-cell");
             const team1NameSpan = document.createElement("span");
-            const team1Name = (_e = state.team1.name) !== null && _e !== void 0 ? _e : "Team 1";
+            const team1Name = (_e = team1.name) !== null && _e !== void 0 ? _e : "Team 1";
             team1NameSpan.setAttribute("title", team1Name);
             team1NameSpan.textContent = team1Name;
             team1NameCell.append(team1NameSpan);
-            if (state.team1.color) {
-                team1NameCell.style.backgroundColor = state.team1.color;
+            if (team1.color) {
+                team1NameCell.style.backgroundColor = team1.color;
             }
             container.append(team1NameCell);
             const team1TotalCell = document.createElement("div");
@@ -656,12 +647,12 @@
             const team2NameCell = document.createElement("div");
             team2NameCell.classList.add("team-name", "team-2", "scoreboard-cell", "bl");
             const team2NameSpan = document.createElement("span");
-            const team2Name = (_f = state.team2.name) !== null && _f !== void 0 ? _f : "Team 2";
+            const team2Name = (_f = team2.name) !== null && _f !== void 0 ? _f : "Team 2";
             team2NameSpan.setAttribute("title", team2Name);
             team2NameSpan.textContent = team2Name;
             team2NameCell.append(team2NameSpan);
-            if (state.team2.color) {
-                team2NameCell.style.backgroundColor = state.team2.color;
+            if (team2.color) {
+                team2NameCell.style.backgroundColor = team2.color;
             }
             container.append(team2NameCell);
             const team2TotalCell = document.createElement("div");
@@ -693,5 +684,14 @@
             }
         }, 100);
     }
-    exports.scoreboard = scoreboard;
-});
+
+    exports.gameStateReducer = gameStateReducer;
+    exports.getClubStyleCardIndexes = getClubStyleCardIndexes;
+    exports.getEndsFromClubStyle = getEndsFromClubStyle;
+    exports.getHammerTeam = getHammerTeam;
+    exports.getScore = getScore;
+    exports.render = render;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
+
+})));

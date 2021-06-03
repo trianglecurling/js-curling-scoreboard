@@ -42,8 +42,9 @@
                 </div>
             </div>
         </div>
-        <script src="scoreboard.js"></script>
+        <script src="output/scoreboard.js"></script>
         <script>
+            const {render, gameStateReducer} = scoreboard;
             const testRoot = document.getElementById("test");
             const previous = document.getElementById("previous");
             const next = document.getElementById("next");
@@ -121,27 +122,27 @@
                 },
                 showTenEnds: true
             };
-            scoreboard(testRoot, initialState, scoreboardOptions);
+            render(testRoot, initialState, scoreboardOptions);
 
             previous.addEventListener("click", () => {
                 currentState = gameStateReducer(currentState, { type: "noop" });
                 currentState.ends.pop();
                 --endIndex;
-                scoreboard(testRoot, currentState, scoreboardOptions);
+                render(testRoot, currentState, scoreboardOptions);
                 next.disabled = endIndex === scores.length;
                 previous.disabled = endIndex === 0;
             });
             next.addEventListener("click", () => {
                 const payload = scores[endIndex++];
                 currentState = gameStateReducer(currentState, { type: "score", payload });
-                scoreboard(testRoot, currentState, scoreboardOptions);
+                render(testRoot, currentState, scoreboardOptions);
                 next.disabled = endIndex === scores.length;
                 previous.disabled = endIndex === 0;
             });
             function variantChange() {
                 const variant = baseballVariant.checked ? "baseball" : clubVariant.checked ? "club" : "simple";
                 scoreboardOptions.variant = variant;
-                scoreboard(testRoot, currentState, scoreboardOptions);
+                render(testRoot, currentState, scoreboardOptions);
             }
             baseballVariant.addEventListener("change", variantChange);
             clubVariant.addEventListener("change", variantChange);
