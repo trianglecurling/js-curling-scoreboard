@@ -20,3 +20,7 @@ scoreboard.render(container, {ends: []});
 ```
 
 For a more full-featured example, open the file `index.html` in a browser.
+
+### Module format
+
+The output file is a UMD JavaScript module. You can import this with most bundlers or module loaders. Or, you can directly load it in a `<script>` tag, which will generate a global variable called `scoreboard` exposing all of the module's exports. See `index.html` for an example.
