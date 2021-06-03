@@ -11,8 +11,6 @@ Represents the state of a curling game
 - [LSFE](gamestate.md#lsfe)
 - [complete](gamestate.md#complete)
 - [ends](gamestate.md#ends)
-- [team1](gamestate.md#team1)
-- [team2](gamestate.md#team2)
 
 ## Properties
 
@@ -25,7 +23,7 @@ Which team started with hammer? 0 for top, 1 for bottom.
 
 #### Defined in
 
-[scoreboard.ts:168](https://github.com/trianglecurling/js-curling-scoreboard/blob/ed5ad77/scoreboard.ts#L168)
+[scoreboard.ts:168](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L168)
 
 ___
 
@@ -37,7 +35,7 @@ Signals that the game is over (may generate "X" markers on some variants)
 
 #### Defined in
 
-[scoreboard.ts:178](https://github.com/trianglecurling/js-curling-scoreboard/blob/ed5ad77/scoreboard.ts#L178)
+[scoreboard.ts:178](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L178)
 
 ___
 
@@ -49,28 +47,4 @@ Ends that have been completed
 
 #### Defined in
 
-[scoreboard.ts:173](https://github.com/trianglecurling/js-curling-scoreboard/blob/ed5ad77/scoreboard.ts#L173)
-
-___
-
-### team1
-
-• **team1**: [Team](team.md)
-
-The top team
-
-#### Defined in
-
-[scoreboard.ts:157](https://github.com/trianglecurling/js-curling-scoreboard/blob/ed5ad77/scoreboard.ts#L157)
-
-___
-
-### team2
-
-• **team2**: [Team](team.md)
-
-The bottom team
-
-#### Defined in
-
-[scoreboard.ts:162](https://github.com/trianglecurling/js-curling-scoreboard/blob/ed5ad77/scoreboard.ts#L162)
+[scoreboard.ts:173](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L173)

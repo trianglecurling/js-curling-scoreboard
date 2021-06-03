@@ -19,7 +19,7 @@ A map from action types to their payload shape
 
 #### Defined in
 
-[scoreboard.ts:588](https://github.com/trianglecurling/js-curling-scoreboard/blob/ed5ad77/scoreboard.ts#L588)
+[scoreboard.ts:588](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L588)
 
 ___
 
@@ -36,4 +36,4 @@ ___
 
 #### Defined in
 
-[scoreboard.ts:587](https://github.com/trianglecurling/js-curling-scoreboard/blob/ed5ad77/scoreboard.ts#L587)
+[scoreboard.ts:587](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L587)

@@ -27,7 +27,7 @@ Payload for the action (see ActionTypeMap)
 
 #### Defined in
 
-[scoreboard.ts:580](https://github.com/trianglecurling/js-curling-scoreboard/blob/ed5ad77/scoreboard.ts#L580)
+[scoreboard.ts:580](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L580)
 
 ___
 
@@ -39,4 +39,4 @@ String action type (see ActionTypeMap)
 
 #### Defined in
 
-[scoreboard.ts:575](https://github.com/trianglecurling/js-curling-scoreboard/blob/ed5ad77/scoreboard.ts#L575)
+[scoreboard.ts:575](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L575)

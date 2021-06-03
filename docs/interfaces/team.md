@@ -21,7 +21,7 @@ The team's color (unused - set using ScoreboardOptions.style)
 
 #### Defined in
 
-[scoreboard.ts:139](https://github.com/trianglecurling/js-curling-scoreboard/blob/ed5ad77/scoreboard.ts#L139)
+[scoreboard.ts:149](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L149)
 
 ___
 
@@ -33,4 +33,4 @@ Name of the team
 
 #### Defined in
 
-[scoreboard.ts:134](https://github.com/trianglecurling/js-curling-scoreboard/blob/ed5ad77/scoreboard.ts#L134)
+[scoreboard.ts:144](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L144)

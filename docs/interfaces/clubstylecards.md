@@ -22,7 +22,7 @@ Set of ends that were blank
 
 #### Defined in
 
-[scoreboard.ts:198](https://github.com/trianglecurling/js-curling-scoreboard/blob/ed5ad77/scoreboard.ts#L198)
+[scoreboard.ts:198](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L198)
 
 ___
 
@@ -34,7 +34,7 @@ Maps point values to end numbers for the top team.
 
 #### Defined in
 
-[scoreboard.ts:188](https://github.com/trianglecurling/js-curling-scoreboard/blob/ed5ad77/scoreboard.ts#L188)
+[scoreboard.ts:188](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L188)
 
 ___
 
@@ -46,4 +46,4 @@ Maps point values to end numbers for the bottom team
 
 #### Defined in
 
-[scoreboard.ts:193](https://github.com/trianglecurling/js-curling-scoreboard/blob/ed5ad77/scoreboard.ts#L193)
+[scoreboard.ts:193](https://github.com/trianglecurling/js-curling-scoreboard/blob/5f36fa5/scoreboard.ts#L193)
