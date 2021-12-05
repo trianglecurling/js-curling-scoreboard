@@ -298,7 +298,22 @@
             `.scoreboard-container .scoreboard-score-cell {
             color: var(--scoreIndicatorNumberColor);
         }`,
-            `.scoreboard-container :is(.blank-end-cell,.end-label-cell,.total-label-cell,.team-label-cell) {
+            `.scoreboard-container .blank-end-cell {
+            text-transform: uppercase;
+            color: var(--foregroundColor);
+            font-size: var(--textFontSize);
+        }`,
+        `.scoreboard-container .end-label-cell {
+            text-transform: uppercase;
+            color: var(--foregroundColor);
+            font-size: var(--textFontSize);
+        }`,
+        `.scoreboard-container .total-label-cell {
+            text-transform: uppercase;
+            color: var(--foregroundColor);
+            font-size: var(--textFontSize);
+        }`,
+        `.scoreboard-container .team-label-cell {
             text-transform: uppercase;
             color: var(--foregroundColor);
             font-size: var(--textFontSize);
@@ -335,7 +350,13 @@
             `.scoreboard-container .team-name {
             padding: 8px;
         }`,
-            `.scoreboard-container :is(.team-name,.blank-end-cell) span {
+            `.scoreboard-container .team-name span {
+            font-size: var(--textFontSize);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }`,
+        `.scoreboard-container blank-end-cell span {
             font-size: var(--textFontSize);
             overflow: hidden;
             text-overflow: ellipsis;

@@ -476,75 +476,96 @@ function ensureStyles(additionalCssRules: string[] = []) {
 
     const rules = [
         `.scoreboard-container {
-            box-sizing: border-box;
-            font-family: var(--fontFamily);
-            display: grid;
-            grid-template-rows: 1fr 1fr 1fr;
-            border: var(--borderSize) solid var(--borderColor);
-            font-size: var(--scoresFontSize);
-            font-weight: var(--fontWeight);
-            background-color: var(--foregroundColor);
-            gap: var(--gridLineSize);
-            border-radius: var(--borderRadius);
-        }`,
+        box-sizing: border-box;
+        font-family: var(--fontFamily);
+        display: grid;
+        grid-template-rows: 1fr 1fr 1fr;
+        border: var(--borderSize) solid var(--borderColor);
+        font-size: var(--scoresFontSize);
+        font-weight: var(--fontWeight);
+        background-color: var(--foregroundColor);
+        gap: var(--gridLineSize);
+        border-radius: var(--borderRadius);
+    }`,
         `.scoreboard-container * {
-            box-sizing: inherit;
-        }`,
+        box-sizing: inherit;
+    }`,
         `.scoreboard-container .scoreboard-score-cell {
-            color: var(--scoreIndicatorNumberColor);
-        }`,
-        `.scoreboard-container :is(.blank-end-cell,.end-label-cell,.total-label-cell,.team-label-cell) {
-            text-transform: uppercase;
-            color: var(--foregroundColor);
-            font-size: var(--textFontSize);
-        }`,
+        color: var(--scoreIndicatorNumberColor);
+    }`,
+        `.scoreboard-container .blank-end-cell {
+        text-transform: uppercase;
+        color: var(--foregroundColor);
+        font-size: var(--textFontSize);
+    }`,
+    `.scoreboard-container .end-label-cell {
+        text-transform: uppercase;
+        color: var(--foregroundColor);
+        font-size: var(--textFontSize);
+    }`,
+    `.scoreboard-container .total-label-cell {
+        text-transform: uppercase;
+        color: var(--foregroundColor);
+        font-size: var(--textFontSize);
+    }`,
+    `.scoreboard-container .team-label-cell {
+        text-transform: uppercase;
+        color: var(--foregroundColor);
+        font-size: var(--textFontSize);
+    }`,
         `.scoreboard-container .scoreboard-cell {
-            background-color: var(--backgroundColor);
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
-            min-width: 0;
-            transition: background-color 3s ease-out 3s;
-        }`,
+        background-color: var(--backgroundColor);
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        min-width: 0;
+        transition: background-color 3s ease-out 3s;
+    }`,
         `.scoreboard-container .flash {
-            background-color: var(--flashBackgroundColor) !important;
-        }`,
+        background-color: var(--flashBackgroundColor) !important;
+    }`,
         `.scoreboard-container .scoreboard-cell.blank-cell {
-            word-spacing: 0.5em;
-        }`,
+        word-spacing: 0.5em;
+    }`,
         `.scoreboard-container .scoreboard-cell.tl {
-            border-top-left-radius: calc(var(--borderRadius) - var(--borderSize));
-        }`,
+        border-top-left-radius: calc(var(--borderRadius) - var(--borderSize));
+    }`,
         `.scoreboard-container .scoreboard-cell.tr {
-            border-top-right-radius: calc(var(--borderRadius) - var(--borderSize));
-        }`,
+        border-top-right-radius: calc(var(--borderRadius) - var(--borderSize));
+    }`,
         `.scoreboard-container .scoreboard-cell.bl {
-            border-bottom-left-radius: calc(var(--borderRadius) - var(--borderSize));
-        }`,
+        border-bottom-left-radius: calc(var(--borderRadius) - var(--borderSize));
+    }`,
         `.scoreboard-container .scoreboard-cell.br {
-            border-bottom-right-radius: calc(var(--borderRadius) - var(--borderSize));
-        }`,
+        border-bottom-right-radius: calc(var(--borderRadius) - var(--borderSize));
+    }`,
         `.scoreboard-container .scoreboard-end-label-cell {
-            font-size: var(--textFontSize);
-        }`,
+        font-size: var(--textFontSize);
+    }`,
         `.scoreboard-container .team-name {
-            padding: 8px;
-        }`,
-        `.scoreboard-container :is(.team-name,.blank-end-cell) span {
-            font-size: var(--textFontSize);
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }`,
+        padding: 8px;
+    }`,
+        `.scoreboard-container .team-name span {
+        font-size: var(--textFontSize);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }`,
+    `.scoreboard-container blank-end-cell span {
+        font-size: var(--textFontSize);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }`,
         `.scoreboard-container .team-name.team-1 {
-            background-color: var(--team1Color);
-        }`,
+        background-color: var(--team1Color);
+    }`,
         `.scoreboard-container .team-name.team-2 {
-            background-color: var(--team2Color);
-        }`,
+        background-color: var(--team2Color);
+    }`,
         `.scoreboard-container .logical-container {
-            display: contents;
-        }`,
+        display: contents;
+    }`,
     ].concat(additionalCssRules);
     for (const rule of rules) {
         styleSheet?.insertRule(rule);
